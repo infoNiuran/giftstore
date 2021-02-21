@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.niuran.giftstore.dao.GiftActionRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.niuran.giftstore.model.GiftActionRecord" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="gift_id" property="giftId" jdbcType="BIGINT" />
+    <result column="action" property="action" jdbcType="VARCHAR" />
+    <result column="quantity" property="quantity" jdbcType="BIGINT" />
+    <result column="operator" property="operator" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="relation_id" property="relationId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, gift_id, `action`, quantity, `operator`, create_time, relation_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.niuran.giftstore.model.GiftActionRecordExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from gift_action_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from gift_action_record
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from gift_action_record
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.niuran.giftstore.model.GiftActionRecordExample" >
+    delete from gift_action_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.niuran.giftstore.model.GiftActionRecord" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gift_action_record (gift_id, `action`, quantity, 
+      `operator`, create_time, relation_id
+      )
+    values (#{giftId,jdbcType=BIGINT}, #{action,jdbcType=VARCHAR}, #{quantity,jdbcType=BIGINT}, 
+      #{operator,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{relationId,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.niuran.giftstore.model.GiftActionRecord" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gift_action_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="giftId != null" >
+        gift_id,
+      </if>
+      <if test="action != null" >
+        `action`,
+      </if>
+      <if test="quantity != null" >
+        quantity,
+      </if>
+      <if test="operator != null" >
+        `operator`,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="relationId != null" >
+        relation_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="giftId != null" >
+        #{giftId,jdbcType=BIGINT},
+      </if>
+      <if test="action != null" >
+        #{action,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null" >
+        #{quantity,jdbcType=BIGINT},
+      </if>
+      <if test="operator != null" >
+        #{operator,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="relationId != null" >
+        #{relationId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.niuran.giftstore.model.GiftActionRecordExample" resultType="java.lang.Integer" >
+    select count(*) from gift_action_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update gift_action_record
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.giftId != null" >
+        gift_id = #{record.giftId,jdbcType=BIGINT},
+      </if>
+      <if test="record.action != null" >
+        `action` = #{record.action,jdbcType=VARCHAR},
+      </if>
+      <if test="record.quantity != null" >
+        quantity = #{record.quantity,jdbcType=BIGINT},
+      </if>
+      <if test="record.operator != null" >
+        `operator` = #{record.operator,jdbcType=BIGINT},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.relationId != null" >
+        relation_id = #{record.relationId,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update gift_action_record
+    set id = #{record.id,jdbcType=BIGINT},
+      gift_id = #{record.giftId,jdbcType=BIGINT},
+      `action` = #{record.action,jdbcType=VARCHAR},
+      quantity = #{record.quantity,jdbcType=BIGINT},
+      `operator` = #{record.operator,jdbcType=BIGINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      relation_id = #{record.relationId,jdbcType=BIGINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.niuran.giftstore.model.GiftActionRecord" >
+    update gift_action_record
+    <set >
+      <if test="giftId != null" >
+        gift_id = #{giftId,jdbcType=BIGINT},
+      </if>
+      <if test="action != null" >
+        `action` = #{action,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null" >
+        quantity = #{quantity,jdbcType=BIGINT},
+      </if>
+      <if test="operator != null" >
+        `operator` = #{operator,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="relationId != null" >
+        relation_id = #{relationId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.niuran.giftstore.model.GiftActionRecord" >
+    update gift_action_record
+    set gift_id = #{giftId,jdbcType=BIGINT},
+      `action` = #{action,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=BIGINT},
+      `operator` = #{operator,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      relation_id = #{relationId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectOneByExample" resultMap="BaseResultMap" parameterType="com.niuran.giftstore.model.GiftActionRecordExample" >
+    <!--
+      WARNING - @mbg.generated
+      This element is automatically generated by MyBatis Generator, do not modify.
+      @project https://github.com/itfsw/mybatis-generator-plugin
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from gift_action_record
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
+</mapper>

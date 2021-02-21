@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.niuran.giftstore.dao.GiftSnapshotMapper" >
+  <resultMap id="BaseResultMap" type="com.niuran.giftstore.model.GiftSnapshot" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="gift_id" property="giftId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="images" property="images" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="unit_price" property="unitPrice" jdbcType="BIGINT" />
+    <result column="unit_price_gold_bean" property="unitPriceGoldBean" jdbcType="BIGINT" />
+    <result column="purchase_option" property="purchaseOption" jdbcType="INTEGER" />
+    <result column="ship_option" property="shipOption" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, gift_id, `name`, description, images, unit, unit_price, unit_price_gold_bean, 
+    purchase_option, ship_option, create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.niuran.giftstore.model.GiftSnapshotExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from gift_snapshot
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from gift_snapshot
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from gift_snapshot
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.niuran.giftstore.model.GiftSnapshotExample" >
+    delete from gift_snapshot
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.niuran.giftstore.model.GiftSnapshot" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gift_snapshot (gift_id, `name`, description, 
+      images, unit, unit_price, 
+      unit_price_gold_bean, purchase_option, ship_option, 
+      create_time, update_time)
+    values (#{giftId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{images,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{unitPrice,jdbcType=BIGINT}, 
+      #{unitPriceGoldBean,jdbcType=BIGINT}, #{purchaseOption,jdbcType=INTEGER}, #{shipOption,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.niuran.giftstore.model.GiftSnapshot" >
+    <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into gift_snapshot
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="giftId != null" >
+        gift_id,
+      </if>
+      <if test="name != null" >
+        `name`,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="images != null" >
+        images,
+      </if>
+      <if test="unit != null" >
+        unit,
+      </if>
+      <if test="unitPrice != null" >
+        unit_price,
+      </if>
+      <if test="unitPriceGoldBean != null" >
+        unit_price_gold_bean,
+      </if>
+      <if test="purchaseOption != null" >
+        purchase_option,
+      </if>
+      <if test="shipOption != null" >
+        ship_option,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="giftId != null" >
+        #{giftId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="images != null" >
+        #{images,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        #{unitPrice,jdbcType=BIGINT},
+      </if>
+      <if test="unitPriceGoldBean != null" >
+        #{unitPriceGoldBean,jdbcType=BIGINT},
+      </if>
+      <if test="purchaseOption != null" >
+        #{purchaseOption,jdbcType=INTEGER},
+      </if>
+      <if test="shipOption != null" >
+        #{shipOption,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.niuran.giftstore.model.GiftSnapshotExample" resultType="java.lang.Integer" >
+    select count(*) from gift_snapshot
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update gift_snapshot
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.giftId != null" >
+        gift_id = #{record.giftId,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null" >
+        `name` = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null" >
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.images != null" >
+        images = #{record.images,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unit != null" >
+        unit = #{record.unit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unitPrice != null" >
+        unit_price = #{record.unitPrice,jdbcType=BIGINT},
+      </if>
+      <if test="record.unitPriceGoldBean != null" >
+        unit_price_gold_bean = #{record.unitPriceGoldBean,jdbcType=BIGINT},
+      </if>
+      <if test="record.purchaseOption != null" >
+        purchase_option = #{record.purchaseOption,jdbcType=INTEGER},
+      </if>
+      <if test="record.shipOption != null" >
+        ship_option = #{record.shipOption,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update gift_snapshot
+    set id = #{record.id,jdbcType=BIGINT},
+      gift_id = #{record.giftId,jdbcType=BIGINT},
+      `name` = #{record.name,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      images = #{record.images,jdbcType=VARCHAR},
+      unit = #{record.unit,jdbcType=VARCHAR},
+      unit_price = #{record.unitPrice,jdbcType=BIGINT},
+      unit_price_gold_bean = #{record.unitPriceGoldBean,jdbcType=BIGINT},
+      purchase_option = #{record.purchaseOption,jdbcType=INTEGER},
+      ship_option = #{record.shipOption,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.niuran.giftstore.model.GiftSnapshot" >
+    update gift_snapshot
+    <set >
+      <if test="giftId != null" >
+        gift_id = #{giftId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="images != null" >
+        images = #{images,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null" >
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPrice != null" >
+        unit_price = #{unitPrice,jdbcType=BIGINT},
+      </if>
+      <if test="unitPriceGoldBean != null" >
+        unit_price_gold_bean = #{unitPriceGoldBean,jdbcType=BIGINT},
+      </if>
+      <if test="purchaseOption != null" >
+        purchase_option = #{purchaseOption,jdbcType=INTEGER},
+      </if>
+      <if test="shipOption != null" >
+        ship_option = #{shipOption,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.niuran.giftstore.model.GiftSnapshot" >
+    update gift_snapshot
+    set gift_id = #{giftId,jdbcType=BIGINT},
+      `name` = #{name,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      images = #{images,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      unit_price = #{unitPrice,jdbcType=BIGINT},
+      unit_price_gold_bean = #{unitPriceGoldBean,jdbcType=BIGINT},
+      purchase_option = #{purchaseOption,jdbcType=INTEGER},
+      ship_option = #{shipOption,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectOneByExample" resultMap="BaseResultMap" parameterType="com.niuran.giftstore.model.GiftSnapshotExample" >
+    <!--
+      WARNING - @mbg.generated
+      This element is automatically generated by MyBatis Generator, do not modify.
+      @project https://github.com/itfsw/mybatis-generator-plugin
+    -->
+    select
+    <include refid="Base_Column_List" />
+    from gift_snapshot
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    limit 1
+  </select>
+</mapper>
