@@ -42,4 +42,6 @@ public interface OrderDetailMapper {
      * @project https://github.com/itfsw/mybatis-generator-plugin
      */
     OrderDetail selectOneByExample(OrderDetailExample example);
+
+    long getSalesVolume(Long giftId);
 }

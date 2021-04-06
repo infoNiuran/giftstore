@@ -8,6 +8,8 @@ import com.niuran.giftstore.model.GiftSnapshot;
 import com.niuran.giftstore.model.GiftSnapshotExample;
 import com.niuran.giftstore.service.GiftService;
 import com.niuran.giftstore.service.GiftSnapshotService;
+import com.niuran.giftstore.util.NullUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,9 +50,10 @@ public class GiftSnapshotServiceImpl implements GiftSnapshotService {
             return Msg.error("礼品已下架！");
         }
 
+
         //看看有没有变化
         //看最近的一次snapshot
-        boolean changed =false;
+        boolean changed = false;
 
         GiftSnapshotExample example = new GiftSnapshotExample();
         example.createCriteria().andGiftIdEqualTo(giftSnapshot.getGiftId());
@@ -62,20 +65,22 @@ public class GiftSnapshotServiceImpl implements GiftSnapshotService {
                     || !lastSnapshot.getDescription().equals(gift.getDescription())
                     || !lastSnapshot.getImages().equals(gift.getImages())
                     || !lastSnapshot.getPurchaseOption().equals(gift.getPurchaseOption())
-                    || !lastSnapshot.getShipOption().equals(giftSnapshot.getShipOption())
+                    || !lastSnapshot.getShipOption().equals(gift.getShipOption())
                     || !lastSnapshot.getUnit().equals(gift.getUnit())
                     || !lastSnapshot.getUnitPrice().equals(gift.getUnitPrice())
-                    || lastSnapshot.getUnitPriceGoldBean().equals(gift.getUnitPriceGoldBean())){
+                    || !lastSnapshot.getUnitPriceGoldBean().equals(gift.getUnitPriceGoldBean())) {
                 changed = true;
             }
-        }else{
+        } else {
             changed = true;
         }
 
-        if(changed){
+        if (changed) {
+            BeanUtils.copyProperties(gift, giftSnapshot, NullUtil.getNullPropertyNames(gift));
+            giftSnapshot.setId(null);
             giftSnapshotMapper.insertSelective(giftSnapshot);
             return Msg.success(giftSnapshotMapper.selectByPrimaryKey(giftSnapshot.getId()));
-        }else{
+        } else {
             return Msg.success(lastSnapshot);
         }
     }
@@ -83,7 +88,7 @@ public class GiftSnapshotServiceImpl implements GiftSnapshotService {
     @Override
     public List<GiftSnapshot> searchGift(List<Long> giftIdList) {
         List<GiftSnapshot> snapshotList = new ArrayList<>();
-        if(giftIdList.size()==0){
+        if (giftIdList.size() == 0) {
             return snapshotList;
         }
         GiftSnapshotExample example = new GiftSnapshotExample();

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.niuran.giftstore.bean.Msg;
 import com.niuran.giftstore.model.Gift;
 import com.niuran.giftstore.request.GiftRequest;
+import com.niuran.giftstore.response.GiftResponse;
 
 import java.util.List;
 
@@ -13,6 +14,8 @@ import java.util.List;
  */
 public interface GiftService {
     Gift getGiftById(Long id);
+
+    GiftResponse getGiftResponseById(Long id);
 
     Msg<Gift> createGift(Gift gift);
 
@@ -32,5 +35,5 @@ public interface GiftService {
 
     List<Gift> searchName(String search);
 
-    PageInfo<Gift> filterPagedGiftList(GiftRequest request);
+    PageInfo<GiftResponse> filterPagedGiftList(GiftRequest request);
 }

@@ -9,6 +9,7 @@ import com.niuran.giftstore.model.Delivery;
 import com.niuran.giftstore.model.DeliveryExample;
 import com.niuran.giftstore.request.DeliveryRequest;
 import com.niuran.giftstore.service.DeliveryService;
+import com.niuran.giftstore.util.NullUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +48,17 @@ public class DeliveryServiceImpl implements DeliveryService {
         if (delivery == null || StringUtils.isEmpty(delivery.getReceiverInfo()) || delivery.getOrderId() == null) {
             return Msg.error("参数错误！");
         }
-        delivery.setStatus(DeliveryStatusEnum.创建.getValue());
-        deliveryMapper.insertSelective(delivery);
+        //检查是不是有现成的未发货的记录
+        DeliveryExample example = new DeliveryExample();
+        example.createCriteria().andOrderIdEqualTo(delivery.getOrderId()).andStatusEqualTo(DeliveryStatusEnum.创建.getValue());
+        Delivery dbDelivery = deliveryMapper.selectOneByExample(example);
+        if(dbDelivery==null) {
+            delivery.setStatus(DeliveryStatusEnum.创建.getValue());
+            deliveryMapper.insertSelective(delivery);
+        }else{
+            BeanUtils.copyProperties(delivery,dbDelivery, NullUtil.getNullPropertyNames(delivery));
+            deliveryMapper.updateByPrimaryKey(dbDelivery);
+        }
         return Msg.success(deliveryMapper.selectByPrimaryKey(delivery.getId()));
     }
 

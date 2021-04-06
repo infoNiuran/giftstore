@@ -3,11 +3,13 @@ package com.niuran.giftstore.controller;
 import com.niuran.giftstore.bean.Msg;
 import com.niuran.giftstore.bean.UserBaseInfo;
 import com.niuran.giftstore.model.Cart;
+import com.niuran.giftstore.model.CartDetail;
 import com.niuran.giftstore.net.CurrentUser;
 import com.niuran.giftstore.net.LoginRequired;
 import com.niuran.giftstore.request.CartRequest;
 import com.niuran.giftstore.response.CartResponse;
 import com.niuran.giftstore.response.base.DataResponse;
+import com.niuran.giftstore.service.CartDetailService;
 import com.niuran.giftstore.service.CartService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ public class CartController {
 
     @Autowired
     private CartService cartService;
+    @Autowired
+    private CartDetailService cartDetailService;
 
     @LoginRequired
     @PostMapping("/getCartResponseById")
@@ -82,5 +86,15 @@ public class CartController {
             return DataResponse.error(msg.getErrorMsg());
         }
         return DataResponse.success(msg.getData());
+    }
+
+    @LoginRequired
+    @PostMapping("/updateCartDetail")
+    public DataResponse increaseCartDetail(@RequestBody CartDetail cartDetail){
+        Msg<CartDetail> msg = cartDetailService.updateCartDetail(cartDetail);
+        if(StringUtils.isNotEmpty(msg.getErrorMsg())){
+            return DataResponse.error(msg.getErrorMsg());
+        }
+        return DataResponse.success();
     }
 }

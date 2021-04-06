@@ -15,6 +15,8 @@ public class CartDetail {
 
     private Date updateTime;
 
+    private Integer checked;
+
     public Long getId() {
         return id;
     }
@@ -61,5 +63,13 @@ public class CartDetail {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getChecked() {
+        return checked;
+    }
+
+    public void setChecked(Integer checked) {
+        this.checked = checked;
     }
 }

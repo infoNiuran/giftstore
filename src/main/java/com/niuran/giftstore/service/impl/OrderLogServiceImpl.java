@@ -4,7 +4,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.niuran.giftstore.bean.Msg;
 import com.niuran.giftstore.dao.OrderLogMapper;
-import com.niuran.giftstore.model.Order;
 import com.niuran.giftstore.model.OrderLog;
 import com.niuran.giftstore.model.OrderLogExample;
 import com.niuran.giftstore.request.OrderLogRequest;

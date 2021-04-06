@@ -2,7 +2,7 @@ package com.niuran.giftstore.request;
 
 import com.niuran.giftstore.bean.Address;
 import com.niuran.giftstore.model.Gift;
-import com.niuran.giftstore.model.Order;
+import com.niuran.giftstore.model.TheOrder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -18,13 +18,14 @@ import java.util.List;
 @Data
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public class OrderRequest extends Order implements Serializable {
-    private List<Gift> giftList;
+public class OrderRequest extends TheOrder implements Serializable {
+    private List<GiftRequest> giftList;
     private Integer page = 1;
     private Integer size = 10;
     private Date startTime;
     private Date endTime;
     private String orderClause;
+    private List<Integer> statusList;
 
     //支付时使用
     /**

@@ -10,6 +10,7 @@ import com.niuran.giftstore.service.GiftService;
 import com.niuran.giftstore.service.GiftSnapshotService;
 import com.niuran.giftstore.service.OrderDetailService;
 import com.niuran.giftstore.service.OrderService;
+import com.niuran.giftstore.util.NullUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,13 +77,13 @@ public class OrderDetailServiceImpl implements OrderDetailService {
                 || orderDetail.getUnitPrice() == null || orderDetail.getPayOption() == null || orderDetail.getOrderId() == null) {
             return Msg.error("参数错误！");
         }
-        Order order = orderService.getOrderById(orderDetail.getOrderId());
+        TheOrder order = orderService.getOrderById(orderDetail.getOrderId());
         if (order == null) {
             return Msg.error("订单不存在！");
         }
 
         GiftSnapshot giftSnapshot = snapshotService.getGiftSnapshotById(orderDetail.getGiftSnapshotId());
-        Gift gift = giftService.getGiftById(giftSnapshot.getId());
+        Gift gift = giftService.getGiftById(giftSnapshot.getGiftId());
 
         //检查有没有重复商品
         List<OrderDetailResponse> orderDetailList = getOrderDetailListByOrderId(orderDetail.getOrderId());
@@ -92,10 +93,10 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             GiftSnapshot snapshot = snapshotService.getGiftSnapshotById(detailResponse.getGiftSnapshotId());
             Gift gift1 = giftService.getGiftById(snapshot.getGiftId());
             if (gift.getId().equals(gift1.getId())) {
-                if (snapshot.getCreateTime().getTime() >= giftSnapshot.getCreateTime().getTime()) {  //原来订单里面的礼品新
+                if (snapshot.getCreateTime().getTime() > giftSnapshot.getCreateTime().getTime()) {  //原来订单里面的礼品新
                     detailResponse.setQuantity(detailResponse.getQuantity() + orderDetail.getQuantity());
                 } else {
-                    BeanUtils.copyProperties(orderDetail, detailResponse);
+                    BeanUtils.copyProperties(orderDetail, detailResponse, NullUtil.getNullPropertyNames(orderDetail));
                 }
                 sameGift = true;
                 Msg<OrderDetail> msg = updateOrderDetail(detailResponse);
@@ -123,19 +124,19 @@ public class OrderDetailServiceImpl implements OrderDetailService {
             return Msg.error("信息不存在！");
         }
 
-        GiftSnapshot giftSnapshot = snapshotService.getGiftSnapshotById(orderDetail.getGiftSnapshotId());
-        Gift gift = giftService.getGiftById(giftSnapshot.getId());
-
-        List<OrderDetailResponse> orderDetailList = getOrderDetailListByOrderId(orderDetail.getOrderId());
-        for (OrderDetailResponse detailResponse : orderDetailList) {
-            if(!detailResponse.getId().equals(orderDetail.getId())) {
-                GiftSnapshot snapshot = snapshotService.getGiftSnapshotById(detailResponse.getGiftSnapshotId());
-                Gift gift1 = giftService.getGiftById(snapshot.getGiftId());
-                if (gift.getId().equals(gift1.getId())) {
-                    return Msg.error("礼品重复！");
-                }
-            }
-        }
+//        GiftSnapshot giftSnapshot = snapshotService.getGiftSnapshotById(orderDetail.getGiftSnapshotId());
+//        Gift gift = giftService.getGiftById(giftSnapshot.getGiftId());
+//
+//        List<OrderDetailResponse> orderDetailList = getOrderDetailListByOrderId(orderDetail.getOrderId());
+//        for (OrderDetailResponse detailResponse : orderDetailList) {
+//            if(!detailResponse.getId().equals(orderDetail.getId())) {
+//                GiftSnapshot snapshot = snapshotService.getGiftSnapshotById(detailResponse.getGiftSnapshotId());
+//                Gift gift1 = giftService.getGiftById(snapshot.getGiftId());
+//                if (gift.getId().equals(gift1.getId())) {
+//                    return Msg.error("礼品重复！");
+//                }
+//            }
+//        }
         orderDetailMapper.updateByPrimaryKeySelective(orderDetail);
         return Msg.success(orderDetailMapper.selectByPrimaryKey(orderDetail.getId()));
     }
@@ -213,4 +214,19 @@ public class OrderDetailServiceImpl implements OrderDetailService {
         orderDetailMapper.deleteByPrimaryKey(orderDetail.getId());
         return Msg.success(1);
     }
+
+    @Override
+    public Long salesVolumeOfGift(Long giftId){
+        return orderDetailMapper.getSalesVolume(giftId);
+    }
+
+
+    @Override
+    public void removeAllItem(Long orderId){
+        OrderDetailExample example = new OrderDetailExample();
+        example.createCriteria().andOrderIdEqualTo(orderId);
+        orderDetailMapper.deleteByExample(example);
+    }
+
+
 }

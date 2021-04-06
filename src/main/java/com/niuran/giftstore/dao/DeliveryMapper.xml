@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.niuran.giftstore.model.Delivery" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="carrier_id" property="carrierId" jdbcType="BIGINT" />
+    <result column="carrier_name" property="carrierName" jdbcType="VARCHAR" />
     <result column="cost" property="cost" jdbcType="BIGINT" />
     <result column="ship_time" property="shipTime" jdbcType="TIMESTAMP" />
     <result column="arrived_time" property="arrivedTime" jdbcType="TIMESTAMP" />
@@ -80,9 +81,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, carrier_id, cost, ship_time, arrived_time, shipper_info, receiver_info, waybill, 
-    track_info, weight, volume, sign_image, create_time, update_time, `status`, order_id, 
-    `type`, is_delivered
+    id, carrier_id, carrier_name, cost, ship_time, arrived_time, shipper_info, receiver_info, 
+    waybill, track_info, weight, volume, sign_image, create_time, update_time, `status`, 
+    order_id, `type`, is_delivered
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.niuran.giftstore.model.DeliveryExample" >
     select
@@ -118,18 +119,20 @@
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into delivery (carrier_id, cost, ship_time, 
-      arrived_time, shipper_info, receiver_info, 
-      waybill, track_info, weight, 
-      volume, sign_image, create_time, 
-      update_time, `status`, order_id, 
-      `type`, is_delivered)
-    values (#{carrierId,jdbcType=BIGINT}, #{cost,jdbcType=BIGINT}, #{shipTime,jdbcType=TIMESTAMP}, 
-      #{arrivedTime,jdbcType=TIMESTAMP}, #{shipperInfo,jdbcType=VARCHAR}, #{receiverInfo,jdbcType=VARCHAR}, 
-      #{waybill,jdbcType=VARCHAR}, #{trackInfo,jdbcType=VARCHAR}, #{weight,jdbcType=BIGINT}, 
-      #{volume,jdbcType=BIGINT}, #{signImage,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{orderId,jdbcType=BIGINT}, 
-      #{type,jdbcType=INTEGER}, #{isDelivered,jdbcType=INTEGER})
+    insert into delivery (carrier_id, carrier_name, cost, 
+      ship_time, arrived_time, shipper_info, 
+      receiver_info, waybill, track_info, 
+      weight, volume, sign_image, 
+      create_time, update_time, `status`, 
+      order_id, `type`, is_delivered
+      )
+    values (#{carrierId,jdbcType=BIGINT}, #{carrierName,jdbcType=VARCHAR}, #{cost,jdbcType=BIGINT}, 
+      #{shipTime,jdbcType=TIMESTAMP}, #{arrivedTime,jdbcType=TIMESTAMP}, #{shipperInfo,jdbcType=VARCHAR}, 
+      #{receiverInfo,jdbcType=VARCHAR}, #{waybill,jdbcType=VARCHAR}, #{trackInfo,jdbcType=VARCHAR}, 
+      #{weight,jdbcType=BIGINT}, #{volume,jdbcType=BIGINT}, #{signImage,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{orderId,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, #{isDelivered,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.niuran.giftstore.model.Delivery" >
     <selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER" >
@@ -139,6 +142,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="carrierId != null" >
         carrier_id,
+      </if>
+      <if test="carrierName != null" >
+        carrier_name,
       </if>
       <if test="cost != null" >
         cost,
@@ -192,6 +198,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="carrierId != null" >
         #{carrierId,jdbcType=BIGINT},
+      </if>
+      <if test="carrierName != null" >
+        #{carrierName,jdbcType=VARCHAR},
       </if>
       <if test="cost != null" >
         #{cost,jdbcType=BIGINT},
@@ -258,6 +267,9 @@
       <if test="record.carrierId != null" >
         carrier_id = #{record.carrierId,jdbcType=BIGINT},
       </if>
+      <if test="record.carrierName != null" >
+        carrier_name = #{record.carrierName,jdbcType=VARCHAR},
+      </if>
       <if test="record.cost != null" >
         cost = #{record.cost,jdbcType=BIGINT},
       </if>
@@ -315,6 +327,7 @@
     update delivery
     set id = #{record.id,jdbcType=BIGINT},
       carrier_id = #{record.carrierId,jdbcType=BIGINT},
+      carrier_name = #{record.carrierName,jdbcType=VARCHAR},
       cost = #{record.cost,jdbcType=BIGINT},
       ship_time = #{record.shipTime,jdbcType=TIMESTAMP},
       arrived_time = #{record.arrivedTime,jdbcType=TIMESTAMP},
@@ -340,6 +353,9 @@
     <set >
       <if test="carrierId != null" >
         carrier_id = #{carrierId,jdbcType=BIGINT},
+      </if>
+      <if test="carrierName != null" >
+        carrier_name = #{carrierName,jdbcType=VARCHAR},
       </if>
       <if test="cost != null" >
         cost = #{cost,jdbcType=BIGINT},
@@ -395,6 +411,7 @@
   <update id="updateByPrimaryKey" parameterType="com.niuran.giftstore.model.Delivery" >
     update delivery
     set carrier_id = #{carrierId,jdbcType=BIGINT},
+      carrier_name = #{carrierName,jdbcType=VARCHAR},
       cost = #{cost,jdbcType=BIGINT},
       ship_time = #{shipTime,jdbcType=TIMESTAMP},
       arrived_time = #{arrivedTime,jdbcType=TIMESTAMP},

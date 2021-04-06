@@ -225,6 +225,76 @@ public class DeliveryExample {
             return (Criteria) this;
         }
 
+        public Criteria andCarrierNameIsNull() {
+            addCriterion("carrier_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarrierNameIsNotNull() {
+            addCriterion("carrier_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarrierNameEqualTo(String value) {
+            addCriterion("carrier_name =", value, "carrierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarrierNameNotEqualTo(String value) {
+            addCriterion("carrier_name <>", value, "carrierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarrierNameGreaterThan(String value) {
+            addCriterion("carrier_name >", value, "carrierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarrierNameGreaterThanOrEqualTo(String value) {
+            addCriterion("carrier_name >=", value, "carrierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarrierNameLessThan(String value) {
+            addCriterion("carrier_name <", value, "carrierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarrierNameLessThanOrEqualTo(String value) {
+            addCriterion("carrier_name <=", value, "carrierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarrierNameLike(String value) {
+            addCriterion("carrier_name like", value, "carrierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarrierNameNotLike(String value) {
+            addCriterion("carrier_name not like", value, "carrierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarrierNameIn(List<String> values) {
+            addCriterion("carrier_name in", values, "carrierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarrierNameNotIn(List<String> values) {
+            addCriterion("carrier_name not in", values, "carrierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarrierNameBetween(String value1, String value2) {
+            addCriterion("carrier_name between", value1, value2, "carrierName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCarrierNameNotBetween(String value1, String value2) {
+            addCriterion("carrier_name not between", value1, value2, "carrierName");
+            return (Criteria) this;
+        }
+
         public Criteria andCostIsNull() {
             addCriterion("cost is null");
             return (Criteria) this;

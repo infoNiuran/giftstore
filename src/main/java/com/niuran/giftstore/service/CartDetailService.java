@@ -23,4 +23,7 @@ public interface CartDetailService {
     List<CartDetailResponse> getCartDetailResponseListByCartId(Cart cart);
 
     Msg<Integer> deleteCartDetail(CartDetail cartDetail);
+
+    Msg<CartDetail> updateCartDetail(CartDetail cartDetail);
+
 }

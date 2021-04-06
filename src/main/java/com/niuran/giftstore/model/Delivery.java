@@ -7,6 +7,8 @@ public class Delivery {
 
     private Long carrierId;
 
+    private String carrierName;
+
     private Long cost;
 
     private Date shipTime;
@@ -53,6 +55,14 @@ public class Delivery {
 
     public void setCarrierId(Long carrierId) {
         this.carrierId = carrierId;
+    }
+
+    public String getCarrierName() {
+        return carrierName;
+    }
+
+    public void setCarrierName(String carrierName) {
+        this.carrierName = carrierName == null ? null : carrierName.trim();
     }
 
     public Long getCost() {

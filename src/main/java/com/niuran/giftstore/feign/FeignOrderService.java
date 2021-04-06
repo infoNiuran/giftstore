@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @Author MrD on 2018/8/1.
  */
-@FeignClient(value = "CLOUD-ORDER-SERVICE")
+@FeignClient(value = "CLOUD-ORDERINFO-SERVICE")
 @Service
 public interface FeignOrderService {
-    @RequestMapping(value = "/pay", method = RequestMethod.POST)
-    public DataResponse pay(@RequestBody PayRequest payRequest);
+    @RequestMapping(value = "/payController/pay", method = RequestMethod.POST)
+    DataResponse pay(@RequestBody PayRequest payRequest);
 }

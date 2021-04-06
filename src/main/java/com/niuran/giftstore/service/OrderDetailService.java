@@ -28,4 +28,8 @@ public interface OrderDetailService {
     PageInfo<OrderDetailResponse> filterPagedOrderDetailList(OrderDetailRequest request);
 
     Msg<Integer> deleteOrderDetail(OrderDetail orderDetail);
+
+    Long salesVolumeOfGift(Long giftId);
+
+    void removeAllItem(Long orderId);
 }

@@ -1,5 +1,6 @@
 package com.niuran.giftstore.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.niuran.giftstore.bean.Msg;
@@ -11,9 +12,12 @@ import com.niuran.giftstore.model.Gift;
 import com.niuran.giftstore.model.GiftActionRecord;
 import com.niuran.giftstore.model.GiftExample;
 import com.niuran.giftstore.request.GiftRequest;
+import com.niuran.giftstore.response.GiftResponse;
 import com.niuran.giftstore.service.GiftActionRecordService;
 import com.niuran.giftstore.service.GiftService;
+import com.niuran.giftstore.service.OrderDetailService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +34,8 @@ public class GiftServiceImpl implements GiftService {
     private GiftMapper giftMapper;
     @Autowired
     private GiftActionRecordService giftActionRecordService;
+    @Autowired
+    private OrderDetailService orderDetailService;
 
     @Override
     public Gift getGiftById(Long id) {
@@ -37,6 +43,19 @@ public class GiftServiceImpl implements GiftService {
             return null;
         }
         return giftMapper.selectByPrimaryKey(id);
+    }
+
+
+    @Override
+    public GiftResponse getGiftResponseById(Long id) {
+        Gift gift = getGiftById(id);
+        if (gift == null) {
+            return null;
+        }
+        GiftResponse response = new GiftResponse();
+        BeanUtils.copyProperties(gift,response);
+        response.setSalesVolume(orderDetailService.salesVolumeOfGift(id));
+        return response;
     }
 
     @Override
@@ -165,7 +184,7 @@ public class GiftServiceImpl implements GiftService {
         GiftActionRecord record = new GiftActionRecord();
         record.setGiftId(request.getId());
         record.setAction("出库");
-        record.setQuantity(record.getQuantity());
+        record.setQuantity(request.getQuantity());
         giftActionRecordService.createGiftActionRecord(record);
         return Msg.success(giftMapper.selectByPrimaryKey(request.getId()));
     }
@@ -182,7 +201,7 @@ public class GiftServiceImpl implements GiftService {
     }
 
     @Override
-    public PageInfo<Gift> filterPagedGiftList(GiftRequest request){
+    public PageInfo<GiftResponse> filterPagedGiftList(GiftRequest request){
         GiftExample example = new GiftExample();
         GiftExample.Criteria criteria = example.createCriteria();
 
@@ -220,6 +239,19 @@ public class GiftServiceImpl implements GiftService {
         }
 
         PageHelper.startPage(request.getPage(),request.getSize());
-        return new PageInfo<>(giftMapper.selectByExample(example));
+        PageInfo<Gift> pageInfo = new PageInfo<>(giftMapper.selectByExample(example));
+
+        PageInfo<GiftResponse> responsePageInfo = new PageInfo<>();
+        BeanUtils.copyProperties(pageInfo,responsePageInfo);
+
+        List<GiftResponse> responseList = new ArrayList<>();
+        for(Gift gift: pageInfo.getList()){
+            GiftResponse response = getGiftResponseById(gift.getId());
+            responseList.add(response);
+        }
+
+        responsePageInfo.setList(responseList);
+
+        return responsePageInfo;
     }
 }

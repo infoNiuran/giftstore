@@ -272,4 +272,10 @@
     </if>
     limit 1
   </select>
+  <select id="getSalesVolume" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select IFNULL(sum(a.quantity), 0) AS sum from order_detail a INNER JOIN the_order b on a.order_id=b.id where b.`status`>0 and b.`status` <![CDATA[<4]]>
+    <if test="_parameter != null" >
+      and a.gift_snapshot_id in (select d.gift_snapshot_id from gift_snapshot s inner JOIN order_detail d on s.id=d.gift_snapshot_id where gift_id = #{giftId,jdbcType=BIGINT})
+    </if>
+  </select>
 </mapper>

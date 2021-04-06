@@ -8,6 +8,7 @@ import com.niuran.giftstore.model.CartDetailExample;
 import com.niuran.giftstore.response.CartDetailResponse;
 import com.niuran.giftstore.service.CartDetailService;
 import com.niuran.giftstore.service.GiftService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +48,7 @@ public class CartDetailServiceImpl implements CartDetailService {
             return null;
         }
         CartDetailResponse response = new CartDetailResponse();
+        BeanUtils.copyProperties(cartDetail,response);
         response.setGift(giftService.getGiftById(cartDetail.getGiftId()));
         return response;
     }
@@ -56,8 +58,25 @@ public class CartDetailServiceImpl implements CartDetailService {
         if(cartDetail==null || cartDetail.getGiftId()==null){
             return Msg.error("参数错误！");
         }
-        cartDetail.setQuantity(1L);
-        cartDetailMapper.insertSelective(cartDetail);
+        CartDetailExample example = new CartDetailExample();
+        example.createCriteria().andCartIdEqualTo(cartDetail.getCartId()).andGiftIdEqualTo(cartDetail.getGiftId());
+        CartDetail dbCartDetail = cartDetailMapper.selectOneByExample(example);
+        if(dbCartDetail==null){
+            if(cartDetail.getQuantity()==null) {
+                cartDetail.setQuantity(1L);
+            }
+            if(cartDetail.getChecked()==null){
+                cartDetail.setChecked(1);
+            }
+            cartDetailMapper.insertSelective(cartDetail);
+        }else{
+            if(cartDetail.getQuantity()==null) {
+                dbCartDetail.setQuantity(dbCartDetail.getQuantity() + 1);
+            }else{
+                dbCartDetail.setQuantity(dbCartDetail.getQuantity()+cartDetail.getQuantity());
+            }
+            cartDetailMapper.updateByPrimaryKeySelective(dbCartDetail);
+        }
         return Msg.success(cartDetailMapper.selectByPrimaryKey(cartDetail.getId()));
     }
 
@@ -90,4 +109,16 @@ public class CartDetailServiceImpl implements CartDetailService {
         return Msg.success(1);
     }
 
+    @Override
+    public Msg<CartDetail> updateCartDetail(CartDetail cartDetail){
+        if(cartDetail==null || cartDetail.getId()==null || cartDetail.getQuantity()==null){
+            return Msg.error("参数错误！");
+        }
+        CartDetail dbCartDetail = cartDetailMapper.selectByPrimaryKey(cartDetail.getId());
+        if(dbCartDetail==null){
+            return Msg.error("信息不存在！");
+        }
+        cartDetailMapper.updateByPrimaryKeySelective(cartDetail);
+        return Msg.success(cartDetailMapper.selectByPrimaryKey(cartDetail.getId()));
+    }
 }

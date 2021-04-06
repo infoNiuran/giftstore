@@ -2,7 +2,7 @@ package com.niuran.giftstore.model;
 
 import java.util.Date;
 
-public class Order {
+public class TheOrder {
     private Long id;
 
     private Long userId;

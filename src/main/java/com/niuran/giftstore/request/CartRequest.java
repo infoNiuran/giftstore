@@ -2,7 +2,6 @@ package com.niuran.giftstore.request;
 
 import com.niuran.giftstore.model.Cart;
 import com.niuran.giftstore.model.CartDetail;
-import com.niuran.giftstore.model.Gift;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

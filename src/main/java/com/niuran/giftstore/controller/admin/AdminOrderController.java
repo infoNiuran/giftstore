@@ -2,7 +2,7 @@ package com.niuran.giftstore.controller.admin;
 
 import com.niuran.giftstore.enume.DeliveryStatusEnum;
 import com.niuran.giftstore.model.Delivery;
-import com.niuran.giftstore.model.Order;
+import com.niuran.giftstore.model.TheOrder;
 import com.niuran.giftstore.request.OrderRequest;
 import com.niuran.giftstore.response.OrderResponse;
 import com.niuran.giftstore.response.base.DataResponse;
@@ -49,7 +49,7 @@ public class AdminOrderController {
     }
 
     @PostMapping("/getOrderResponseById")
-    public DataResponse getOrderResponseById(@RequestBody Order order){
+    public DataResponse getOrderResponseById(@RequestBody TheOrder order){
         if(order==null || order.getId()==null){
             return DataResponse.error("参数错误！");
         }
